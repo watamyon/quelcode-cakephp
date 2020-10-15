@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -36,7 +35,7 @@ class BiditemsTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-
+        // 使用するデータベーステーブルの名前を設定している
         $this->setTable('biditems');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
@@ -72,6 +71,18 @@ class BiditemsTable extends Table
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
             ->notEmptyString('name');
+
+        $validator
+            ->scalar('detail')
+            ->maxLength('detail', 1000)
+            ->requirePresence('detail', 'create')
+            ->notEmptyString('detail');
+
+        $validator
+            ->scalar('file_name')
+            ->maxLength('file_name', 100)
+            ->requirePresence('file_name', 'create')
+            ->notEmptyFile('file_name');
 
         $validator
             ->boolean('finished')
