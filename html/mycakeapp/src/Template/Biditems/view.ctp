@@ -31,6 +31,15 @@
             <td><?= h($biditem->name) ?></td>
         </tr>
         <tr>
+            <th scope="row"><?= __('Detail') ?></th>
+            <td><?= h($biditem->detail) ?></td>
+        </tr>
+        <!-- 詳細画面であるため、商品の画像データを表示する-->
+        <tr>
+            <th scope="row"><?= __('File_name') ?></th>
+            <td><img src="<?= print($filePath); ?>"></td>
+        </tr>
+        <tr>
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($biditem->id) ?></td>
         </tr>
