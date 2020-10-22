@@ -14,3 +14,7 @@
  */
 
 require 'webroot' . DIRECTORY_SEPARATOR . 'index.php';
+
+/Users/satu/git/quelcode-cakephp/html/mycakeapp/webroot/tmp_images/40greatest_7habits.jpg
+
+string(65) "/var/www/html/mycakeapp/webroot/tmp_images/40greatest_7habits.jpg"
