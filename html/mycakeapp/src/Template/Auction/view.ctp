@@ -1,4 +1,4 @@
-<h2>「<?= $biditem->name ?>」の情報</h2>
+<h2>「<?=$biditem->name ?> 」の情報</h2>
 <table class="vertical-table">
 <tr>
 	<th class="small" scope="row">出品者</th>
@@ -11,6 +11,24 @@
 <tr>
 	<th scope="row">商品ID</th>
 	<td><?= $this->Number->format($biditem->id) ?></td>
+</tr>
+<tr>
+	<th scope="row">商品詳細</th>
+	<td><?= h($biditem->detail) ?></td>
+</tr>
+<tr>
+	<th scope="row">商品画像</th>
+	<!-- $filePathが未定義って出た。この場合、このファイルにも再度$failePathを定義する必要があると仮定して進める -->
+	<!-- まずはDBからfile_nameをとって、それとfile_name直前までのフルパスを加えたものを$filePath変数に入れる -->
+	<!-- DBの情報はこのページからでも取れるas others do above and below. -->
+	<!-- ということで、フルパスと$biditem->file_nameを組み合わせたものを$filePathに入れて、それをimgのsrcに挿れる -->
+	<?php
+	$filePath = '/var/www/html/mycakeapp/webroot/tmp_images/' . $biditem->file_name;
+	var_dump($filePath);
+	?>
+	<td><img src="<?= print($filePath); ?>" alt="<?=$biditem->name ?>の画像"></td>
+	<!-- きちんとファイルパスがあっていれば表示されるかどうかを確認→表示されなかった -->
+	<!-- <td><img src="/var/www/html/mycakeapp/webroot/tmp_images/40greatest_7habits.jpg" alt="7つの習慣"></td> -->
 </tr>
 <tr>
 	<th scope="row">終了時間</th>
