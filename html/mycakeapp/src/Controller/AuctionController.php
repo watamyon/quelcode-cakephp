@@ -2,9 +2,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
 use Cake\Event\Event; // added.
 use Exception; // added.
+
 
 class AuctionController extends AuctionBaseController
 {
@@ -82,14 +82,24 @@ class AuctionController extends AuctionBaseController
 	// 出品する処理
 	public function add()
 	{
+		
 		// Biditemインスタンスを用意
 		$biditem = $this->Biditems->newEntity();
 		// POST送信時の処理
 		if ($this->request->is('post')) {
+			// 画像ファイルの中身の取得
+			$file = $_FILES['file_name'];
 			// $biditemにフォームの送信内容を反映
 			$biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
+			$biditem->file_name = $file['name'];
 			// $biditemを保存する
 			if ($this->Biditems->save($biditem)) {
+				// ファイル名にIDを付け加えるための、ファイル名更新処理
+				$biditem->file_name = $biditem['id'] . $file['name'];
+				$this->Biditems->save($biditem);
+				// 画像ファイルを指定のフォルダに保存（フォルダは自作）
+				$filePath = '/var/www/html/mycakeapp/webroot/tmp_images/' . $biditem['id'] . $file['name'];
+            	$success = move_uploaded_file($file['tmp_name'], $filePath);
 				// 成功時のメッセージ
 				$this->Flash->success(__('保存しました。'));
 				// トップページ（index）に移動
