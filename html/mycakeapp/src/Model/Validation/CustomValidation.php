@@ -12,7 +12,7 @@ class CustomValidation extends Validation
         $ext_lower = mb_strtolower($ext);
         if($ext_lower == '.gif' || $ext_lower == '.jpg' || $ext_lower == '.png' || $ext_lower == '.jpeg'){
         } else {
-            echo '画像ファイルを選択してください。（Customバリデーションで設定したメッセージ）';
+            echo '画像ファイルを選択してください。';
         }
     }
 }
