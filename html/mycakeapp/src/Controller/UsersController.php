@@ -66,7 +66,7 @@ class UsersController extends AppController
     // 認証を使わないページの設定
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->Auth->allow(['login']);
+        $this->Auth->allow(['login', 'index', 'add']);
     }
 
     // 認証時のロールのチェック
