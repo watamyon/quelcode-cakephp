@@ -155,3 +155,7 @@ table tr th.small {
 nav.sidebar {
 	background:#f6f6ff;
 }
+
+img {
+    height:300px;
+}
