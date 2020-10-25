@@ -61,7 +61,7 @@ class BiditemsController extends AuctionBaseController
                 $biditem->file_name = $biditem['id'] . '.' . $file_ext;
 				$this->Biditems->save($biditem);
 				$filePath = '/var/www/html/mycakeapp/webroot/img/auction/' . $biditem['id'] . '.' . $file_ext;
-            	$success = move_uploaded_file($file['tmp_name'], $filePath);
+                $success = move_uploaded_file($file['tmp_name'], $filePath);
                 $this->Flash->success(__('The biditem has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -71,7 +71,7 @@ class BiditemsController extends AuctionBaseController
         $users = $this->Biditems->Users->find('list', ['limit' => 200]);
         $this->set(compact('biditem', 'users'));
     }
-
+    
     /**
      * Edit method
      *

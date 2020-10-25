@@ -101,7 +101,7 @@ class AuctionController extends AuctionBaseController
 				$this->Biditems->save($biditem);
 				// 画像ファイルを指定のフォルダに保存（フォルダは自作）
 				$filePath = '/var/www/html/mycakeapp/webroot/img/auction/' . $biditem['id'] . '.' . $file_ext;
-            	$success = move_uploaded_file($file['tmp_name'], $filePath);
+				$success = move_uploaded_file($file['tmp_name'], $filePath);
 				// 成功時のメッセージ
 				$this->Flash->success(__('保存しました。'));
 				// トップページ（index）に移動
