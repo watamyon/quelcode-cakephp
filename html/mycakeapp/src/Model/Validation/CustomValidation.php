@@ -10,7 +10,7 @@ class CustomValidation extends Validation
         $file = $_FILES['file_name'];
         $ext = substr($file['name'], -4);
         $ext_lower = mb_strtolower($ext);
-        if($ext_lower == '.gif' || $ext_lower == '.jpg' || $ext_lower == '.png' || $ext_lower == '.jpeg'){
+        if($ext_lower == '.gif' || $ext_lower == '.jpg' || $ext_lower == '.png' || $ext_lower == 'jpeg'){
         } else {
             echo '画像ファイルを選択してください。';
         }
