@@ -23,7 +23,7 @@
     </ul>
 </nav>
 <div class="biditems form large-9 medium-8 columns content">
-    <?= $this->Form->create($biditem) ?>
+    <?= $this->Form->create($biditem, ['enctype' => 'multipart/form-data']) ?>
     <fieldset>
         <legend><?= __('Edit Biditem') ?></legend>
         <?php
