@@ -18,7 +18,7 @@
 </tr>
 <tr>
 	<th scope="row">商品画像</th>
-	<td><?php echo $this->Html->image('/img/auction/' . h($biditem->file_name));	?></td>
+	<td><?php echo $this->Html->image('/img/auction/' . h($biditem->file_name));?></td>
 </tr>
 <tr>
 	<th scope="row">終了時間</th>
