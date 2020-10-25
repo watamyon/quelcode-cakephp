@@ -55,10 +55,12 @@ class BiditemsController extends AuctionBaseController
             $file = $_FILES['file_name'];
             $biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
             $biditem->file_name = $file['name'];
+            $pathin = pathinfo($file['name']);
+			$file_ext= $pathin['extension'];
             if ($this->Biditems->save($biditem)) {
-                $biditem->file_name = $biditem['id'] . $file['name'];
+                $biditem->file_name = $biditem['id'] . '.' . $file_ext;
 				$this->Biditems->save($biditem);
-				$filePath = '/var/www/html/mycakeapp/webroot/img/auction/' . $biditem['id'] . $file['name'];
+				$filePath = '/var/www/html/mycakeapp/webroot/img/auction/' . $biditem['id'] . '.' . $file_ext;
             	$success = move_uploaded_file($file['tmp_name'], $filePath);
                 $this->Flash->success(__('The biditem has been saved.'));
 

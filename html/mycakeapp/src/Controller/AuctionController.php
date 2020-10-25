@@ -92,13 +92,15 @@ class AuctionController extends AuctionBaseController
 			// $biditemにフォームの送信内容を反映
 			$biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
 			$biditem->file_name = $file['name'];
+			$pathin = pathinfo($file['name']);
+			$file_ext= $pathin['extension'];
 			// $biditemを保存する
 			if ($this->Biditems->save($biditem)) {
 				// ファイル名を一意にする為にIDを付け加えるファイル名更新処理
-				$biditem->file_name = $biditem['id'] . $file['name'];
+				$biditem->file_name = $biditem['id'] . '.' . $file_ext;
 				$this->Biditems->save($biditem);
 				// 画像ファイルを指定のフォルダに保存（フォルダは自作）
-				$filePath = '/var/www/html/mycakeapp/webroot/img/auction/' . $biditem['id'] . $file['name'];
+				$filePath = '/var/www/html/mycakeapp/webroot/img/auction/' . $biditem['id'] . '.' . $file_ext;
             	$success = move_uploaded_file($file['tmp_name'], $filePath);
 				// 成功時のメッセージ
 				$this->Flash->success(__('保存しました。'));
