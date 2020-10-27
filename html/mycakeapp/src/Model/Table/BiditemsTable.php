@@ -62,7 +62,6 @@ class BiditemsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator->provider('Custom', 'App\Model\Validation\CustomValidation');
 
         $validator
             ->integer('id')
@@ -88,6 +87,7 @@ class BiditemsTable extends Table
             ->add('file_name', 'fileNameRule',[
                 'rule'=>['isImageFile'],
                 'provider'=>'Custom',
+                'message'=>'画像ファイルを選択してください',
             ]);
 
         $validator
@@ -112,24 +112,16 @@ class BiditemsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        $rules->provider('Custom', 'App\Model\Validation\CustomValidation');
+
+            $rules->add('file_name', 'fileNameRule',[
+                'rule'=>['isImageFile'],
+                'provider'=>'Custom',
+                'message'=>'画像ファイルを選択してください',
+            ]);
+        
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
     }
-
-    //  この処理ぜんぜん違う言われたwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    // 田中さん辛辣wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    // ま事実やし、ふつうに面白かったし、ここ直せば解決してくし、いいんじゃん。いいじゃんいいじゃん。
-    //  このモデル、テーブルでCRUD処理を行う
-		// try {
-		// 	$db = new PDO('mysql:dbname=docker_db; host=mysql; charset=utf8', 'docker_db_user', 'docker_db_user_pass');
-		// 	} catch(PDOException $e) {
-		// 		echo 'DB接続エラー：'. $e->getMessage();
-        // 	}
-        // 		// ここで条件にあっていれば、 update文で画像ファイル名をDBに挿入。しかし、mvcモデルの説明を見た感じだと、ここではなくモデルのTable?の方に挿れる説
-		// 		$image_name=$file['name'];
-		// 		$db_update=$db->prepare("UPDATE biditems SET file_name=$image_name");
-        // 		$db_update->execute();
-        // cakeを使っている以上はこの処理をしなくていい。
-        // 
 }
