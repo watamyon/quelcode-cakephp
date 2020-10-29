@@ -83,12 +83,7 @@ class BiditemsTable extends Table
             ->scalar('file_name','文字列ではありません')
             ->maxLength('file_name', 100,'エラーメッセージ')
             ->requirePresence('file_name', 'create')
-            ->notEmptyFile('file_name')
-            ->add('file_name', 'fileNameRule',[
-                'rule'=>['isImageFile'],
-                'provider'=>'Custom',
-                'message'=>'画像ファイルを選択してください',
-            ]);
+            ->notEmptyFile('file_name');
 
         $validator
             ->boolean('finished')
@@ -112,16 +107,32 @@ class BiditemsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->provider('Custom', 'App\Model\Validation\CustomValidation');
+        $rules->add(function ($entity, $options) {
+            $file = $entity->file_name;
+            $ext = substr($file, -4);
+            $ext_lower = mb_strtolower($ext);
+            if(!($ext_lower == '.gif' || $ext_lower == '.jpg' || $ext_lower == '.png' || $ext_lower == 'jpeg')){
+                return false;
+            } else {
+                return true;
+            }
+        }, 'fileNameCheck', [
+            // エラーメッセージが出せない。なぜ？（ファイルの識別はできる状態）
+            'errorField' => 'nav',
+            'message' => '画像ファイルを選択してください。'
+        ]);        
 
-            $rules->add('file_name', 'fileNameRule',[
-                'rule'=>['isImageFile'],
-                'provider'=>'Custom',
-                'message'=>'画像ファイルを選択してください',
-            ]);
-        
         $rules->add($rules->existsIn(['user_id'], 'Users'));
-
         return $rules;
     }
 }
+
+// これが見本の処理、コレに当てはめるようにrule作った
+            // if ($entity->title != 'テスト') {
+            //     return true;
+            // } else {
+            //     return false;
+            // }
+            // 形式パクる
+            // 既に$entity->file_nameでエンティティにsaveするときのfile_nameを取れているから、このfile_nameの末尾四桁が
+            // 指定する拡張子に当てはまるかどうかをチェックすればいい。
