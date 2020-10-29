@@ -107,15 +107,16 @@ class BiditemsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        // こちらの処理の一部を、下記の処理に書き換える
+        // $pathin = pathinfo($file['name']);
+        // $file_ext = $pathin['extension'];
+        
         $rules->add(function ($entity, $options) {
             $file = $entity->file_name;
-            $ext = substr($file, -4);
+            $pathin = pathinfo($file);
+            $ext = $pathin['extension'];
             $ext_lower = mb_strtolower($ext);
-            if(!($ext_lower == '.gif' || $ext_lower == '.jpg' || $ext_lower == '.png' || $ext_lower == 'jpeg')){
-                return false;
-            } else {
-                return true;
-            }
+            return in_array($ext_lower, ['gif', 'jpg', 'png', 'jpeg'], true);
         }, 'fileNameCheck', [
             'errorField' => 'file_name',
             'message' => '画像ファイルを選択してください。'
