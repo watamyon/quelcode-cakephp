@@ -106,11 +106,7 @@ class BiditemsTable extends Table
      * @return \Cake\ORM\RulesChecker
      */
     public function buildRules(RulesChecker $rules)
-    {
-        // こちらの処理の一部を、下記の処理に書き換える
-        // $pathin = pathinfo($file['name']);
-        // $file_ext = $pathin['extension'];
-        
+    {   
         $rules->add(function ($entity, $options) {
             $file = $entity->file_name;
             $pathin = pathinfo($file);
