@@ -117,7 +117,6 @@ class BiditemsTable extends Table
                 return true;
             }
         }, 'fileNameCheck', [
-            // エラーメッセージが出せない。なぜ？（ファイルの識別はできる状態）
             'errorField' => 'file_name',
             'message' => '画像ファイルを選択してください。'
         ]);        
@@ -126,13 +125,3 @@ class BiditemsTable extends Table
         return $rules;
     }
 }
-
-// これが見本の処理、コレに当てはめるようにrule作った
-            // if ($entity->title != 'テスト') {
-            //     return true;
-            // } else {
-            //     return false;
-            // }
-            // 形式パクる
-            // 既に$entity->file_nameでエンティティにsaveするときのfile_nameを取れているから、このfile_nameの末尾四桁が
-            // 指定する拡張子に当てはまるかどうかをチェックすればいい。
