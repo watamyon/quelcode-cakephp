@@ -118,7 +118,7 @@ class BiditemsTable extends Table
             }
         }, 'fileNameCheck', [
             // エラーメッセージが出せない。なぜ？（ファイルの識別はできる状態）
-            'errorField' => 'nav',
+            'errorField' => 'file_name',
             'message' => '画像ファイルを選択してください。'
         ]);        
 
