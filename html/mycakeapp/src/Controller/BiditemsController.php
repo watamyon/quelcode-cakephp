@@ -68,7 +68,7 @@ class BiditemsController extends AuctionBaseController
 			$this->Flash->error(__('The biditem could not be saved. Please, try again.'));
 		}
 		$users = $this->Biditems->Users->find('list', ['limit' => 200]);
-		$this->set(compact('biditem', 　'users'));
+		$this->set(compact('biditem', 'users'));
 	}
 	/**
 	 * Edit method
