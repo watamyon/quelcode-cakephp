@@ -26,99 +26,98 @@ use Cake\Validation\Validator;
  */
 class BiditemsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
-        // 使用するデータベーステーブルの名前を設定している
-        $this->setTable('biditems');
-        $this->setDisplayField('name');
-        $this->setPrimaryKey('id');
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
+		// 使用するデータベーステーブルの名前を設定している
+		$this->setTable('biditems');
+		$this->setDisplayField('name');
+		$this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+		$this->addBehavior('Timestamp');
 
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->hasOne('Bidinfo', [
-            'foreignKey' => 'biditem_id',
-        ]);
-        $this->hasMany('Bidrequests', [
-            'foreignKey' => 'biditem_id',
-        ]);
-    }
+		$this->belongsTo('Users', [
+			'foreignKey' => 'user_id',
+			'joinType' => 'INNER',
+		]);
+		$this->hasOne('Bidinfo', [
+			'foreignKey' => 'biditem_id',
+		]);
+		$this->hasMany('Bidrequests', [
+			'foreignKey' => 'biditem_id',
+		]);
+	}
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
+	/**
+	 * Default validation rules.
+	 *
+	 * @param \Cake\Validation\Validator $validator Validator instance.
+	 * @return \Cake\Validation\Validator
+	 */
+	public function validationDefault(Validator $validator)
+	{
 
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
+		$validator
+			->integer('id')
+			->allowEmptyString('id', null, 'create');
 
-        $validator
-            ->scalar('name')
-            ->maxLength('name', 100)
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+		$validator
+			->scalar('name')
+			->maxLength('name', 100)
+			->requirePresence('name', 'create')
+			->notEmptyString('name');
 
-        $validator
-            ->scalar('detail')
-            ->maxLength('detail', 1000)
-            ->requirePresence('detail', 'create')
-            ->notEmptyString('detail');
+		$validator
+			->scalar('detail')
+			->maxLength('detail', 1000)
+			->requirePresence('detail', 'create')
+			->notEmptyString('detail');
 
-        $validator
-            ->scalar('file_name','文字列ではありません')
-            ->maxLength('file_name', 100,'エラーメッセージ')
-            ->requirePresence('file_name', 'create')
-            ->notEmptyFile('file_name');
+		$validator
+			->scalar('file_name','文字列ではありません')
+			->maxLength('file_name', 100,'エラーメッセージ')
+			->requirePresence('file_name', 'create')
+			->notEmptyFile('file_name');
 
-        $validator
-            ->boolean('finished')
-            ->requirePresence('finished', 'create')
-            ->notEmptyString('finished');
+		$validator
+			->boolean('finished')
+			->requirePresence('finished', 'create')
+			->notEmptyString('finished');
 
-        $validator
-            ->dateTime('endtime')
-            ->requirePresence('endtime', 'create')
-            ->notEmptyDateTime('endtime');
+		$validator
+			->dateTime('endtime')
+			->requirePresence('endtime', 'create')
+			->notEmptyDateTime('endtime');
 
-        return $validator;
-    }
+		return $validator;
+	}
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {   
-        $rules->add(function ($entity, $options) {
-            $file = $entity->file_name;
-            $pathin = pathinfo($file);
-            $ext = $pathin['extension'];
-            $ext_lower = mb_strtolower($ext);
-            return in_array($ext_lower, ['gif', 'jpg', 'png', 'jpeg'], true);
-        }, 'fileNameCheck', [
-            'errorField' => 'file_name',
-            'message' => '画像ファイルを選択してください。'
-        ]);        
-
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
-        return $rules;
-    }
+	/**
+	 * Returns a rules checker object that will be used for validating
+	 * application integrity.
+	 *
+	 * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+	 * @return \Cake\ORM\RulesChecker
+	 */
+	public function buildRules(RulesChecker $rules)
+	{   
+		$rules->add(function ($entity, $options) {
+			$file = $entity->file_name;
+			$pathin = pathinfo($file);
+			$ext = $pathin['extension'];
+			$ext_lower = mb_strtolower($ext);
+			return in_array($ext_lower, ['gif', 'jpg', 'png', 'jpeg'], true);
+		}, 'fileNameCheck', [
+			'errorField' => 'file_name',
+			'message' => '画像ファイルを選択してください。'
+		]);
+		$rules->add($rules->existsIn(['user_id'], 'Users'));
+		return $rules;
+	}
 }
