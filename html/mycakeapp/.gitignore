@@ -41,3 +41,5 @@ nbproject/*
 .vscode
 # Sass preprocessor
 .sass-cache/
+# migrationで生成されるバイナリファイルを無視
+schema-dump-default.lock
