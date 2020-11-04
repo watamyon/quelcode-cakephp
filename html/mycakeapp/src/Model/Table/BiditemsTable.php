@@ -110,9 +110,11 @@ class BiditemsTable extends Table
 		$rules->add(function ($entity, $options) {
 			$file = $entity->file_name;
 			$pathin = pathinfo($file);
-			$ext = $pathin['extension'];
+			if(isset($pathin['extension'])){
+				$ext = $pathin['extension'];
 			$ext_lower = mb_strtolower($ext);
 			return in_array($ext_lower, ['gif', 'jpg', 'png', 'jpeg'], true);
+			}
 		}, 'fileNameCheck', [
 			'errorField' => 'file_name',
 			'message' => '画像ファイルを選択してください。'
