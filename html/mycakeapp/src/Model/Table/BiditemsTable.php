@@ -106,20 +106,18 @@ class BiditemsTable extends Table
 	 * @return \Cake\ORM\RulesChecker
 	 */
 	public function buildRules(RulesChecker $rules)
-	{   
-		$rules->add(function ($entity, $options) {
-			$file = $entity->file_name;
-			$pathin = pathinfo($file);
-			if(isset($pathin['extension'])){
-				$ext = $pathin['extension'];
-				$ext_lower = mb_strtolower($ext);
-				return in_array($ext_lower, ['gif', 'jpg', 'png', 'jpeg'], true);
-			}
-		}, 'fileNameCheck', [
-			'errorField' => 'file_name',
-			'message' => '画像ファイルを選択してください。'
-		]);
-		$rules->add($rules->existsIn(['user_id'], 'Users'));
-		return $rules;
-	}
+    {
+        $rules->add(function ($entity, $options) {
+            $file = $entity->file_name;
+            $pathin = pathinfo($file);
+            $ext = $pathin['extension'] ?? '';
+            $ext_lower = mb_strtolower($ext);
+            return in_array($ext_lower, ['gif', 'jpg', 'png', 'jpeg'], true);
+        }, 'fileNameCheck', [
+            'errorField' => 'file_name',
+            'message' => '画像ファイルを選択してください。'
+        ]);
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
+        return $rules;
+    }
 }
