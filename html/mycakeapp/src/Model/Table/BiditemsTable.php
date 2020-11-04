@@ -112,8 +112,8 @@ class BiditemsTable extends Table
 			$pathin = pathinfo($file);
 			if(isset($pathin['extension'])){
 				$ext = $pathin['extension'];
-			$ext_lower = mb_strtolower($ext);
-			return in_array($ext_lower, ['gif', 'jpg', 'png', 'jpeg'], true);
+				$ext_lower = mb_strtolower($ext);
+				return in_array($ext_lower, ['gif', 'jpg', 'png', 'jpeg'], true);
 			}
 		}, 'fileNameCheck', [
 			'errorField' => 'file_name',
