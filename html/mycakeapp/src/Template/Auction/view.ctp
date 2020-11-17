@@ -1,4 +1,4 @@
-<h2>「<?= $biditem->name ?>」の情報</h2>
+<h2>「<?=$biditem->name ?> 」の情報</h2>
 <table class="vertical-table">
 <tr>
 	<th class="small" scope="row">出品者</th>
@@ -11,6 +11,14 @@
 <tr>
 	<th scope="row">商品ID</th>
 	<td><?= $this->Number->format($biditem->id) ?></td>
+</tr>
+<tr>
+	<th scope="row">商品詳細</th>
+	<td><?= h($biditem->detail) ?></td>
+</tr>
+<tr>
+	<th scope="row">商品画像</th>
+	<td><?php echo $this->Html->image('/img/auction/' . h($biditem->file_name));?></td>
 </tr>
 <tr>
 	<th scope="row">終了時間</th>

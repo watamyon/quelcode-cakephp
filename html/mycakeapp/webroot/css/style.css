@@ -522,3 +522,7 @@ table td {
     vertical-align: top;
     word-break: break-all;
 }
+
+img {
+    height:300px;
+}

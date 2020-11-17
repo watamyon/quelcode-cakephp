@@ -42,7 +42,7 @@ class BidrequestsFixture extends TestFixture
                 'biditem_id' => 1,
                 'user_id' => 1,
                 'price' => 1,
-                'created' => '2020-06-03 02:28:48',
+                'created' => '2020-09-28 14:35:55',
             ],
         ];
         parent::init();

@@ -43,8 +43,8 @@ class BiditemsFixture extends TestFixture
                 'user_id' => 1,
                 'name' => 'Lorem ipsum dolor sit amet',
                 'finished' => 1,
-                'endtime' => '2020-06-03 02:28:33',
-                'created' => '2020-06-03 02:28:33',
+                'endtime' => '2020-09-28 14:35:10',
+                'created' => '2020-09-28 14:35:10',
             ],
         ];
         parent::init();
