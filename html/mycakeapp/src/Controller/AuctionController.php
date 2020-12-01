@@ -280,7 +280,6 @@ class AuctionController extends AuctionBaseController
 		} else {
 			return $this->redirect(['action' => 'index']);
 		}
-		// viewに値を渡せるように保存。 同じ値が取れるものは排除する必要あり？e.g. bidinfo['biditem_id']でitem_idは取れる。
 		$this->set(compact('bidinfo', 'item_id', 'biditem', 'bidder_id', 'login_userid', 'shipping','shipping_to'));
 	}
 }
