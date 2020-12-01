@@ -220,7 +220,6 @@ class AuctionController extends AuctionBaseController
 		$seller_id = $biditem['user_id'];
 		$login_userid = $this->Auth->user('id');
 		// 落札者からのpost送信があった場合
-		// この下の条件だと、まだ発送先
 		if ($bidder_id === $login_userid && ($shipping_to['is_shipped'] === false) || null === $shipping_to) {
 			$shipping = $this->Shipping->newEntity();
 			// ship.ctpから発送先の情報が送信されていれば、その発送先の情報をインスタンスに代入する
@@ -236,10 +235,11 @@ class AuctionController extends AuctionBaseController
 		} elseif($bidder_id === $login_userid && $shipping_to['is_shipped'] === true) {
 			return $this->redirect(['action' => 'receive', $item_id]);
 			// 出品者からのpost送信があった場合
-		} elseif ($seller_id === $login_userid) {
+		} elseif ($seller_id === $login_userid && isset($shipping_to)) {
+			// この処理のis('post')で来た値をそのまま使うのではなく、postが来たら1かtrueを送信するようにする。他に同様の処理をしている所があれば、そこも修正。＝発送通知と受取通知。
 			if ($this->request->is('post')) {
 				$shipping = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->first();
-				$shipping = $this->Shipping->patchEntity($shipping, $this->request->getData());
+				$shipping = $this->Shipping->patchEntity($shipping, ['is_shipped' => 1]);
 				// Shippingを更新
 				if ($this->Shipping->save($shipping)) {
 					return $this->redirect(['action' => 'ship', $item_id]);
@@ -270,7 +270,7 @@ class AuctionController extends AuctionBaseController
 		if ($bidder_id === $login_userid && $shipping_to['is_shipped'] === true) {
 			if ($this->request->is('post')) {
 				$shipping = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->first();
-				$shipping = $this->Shipping->patchEntity($shipping, $this->request->getData());
+				$shipping = $this->Shipping->patchEntity($shipping, ['is_received' => 1]);
 				// Shippingを更新
 				if ($this->Shipping->save($shipping)) {
 					return $this->redirect(['action' => 'receive', $item_id]);
