@@ -1,12 +1,4 @@
-<?php
-// なぜ配列の中に入っている値を絞って取り出そうとすると取り出せない？
-// foreach ($bidinfo as $key => $info):
-// echo $key;
-// echo$info;
-// var_dump($bidinfo);
-// endforeach;
-// なぜ矢印では取り出せなくて、[]では取り出せるのか調べる
-if($login_userid === $bidder_id):?>
+<?php if($login_userid === $bidder_id):?>
 <?php if($shipping_to['is_shipped'] === true && $shipping_to['is_received'] === false): ?>
 <h2>商品「<?=$biditem['name'] ?>」の発送先情報</h2>
 <table class="vertical-table">
