@@ -17,7 +17,7 @@
 </table>
 <h3>※発送されました</h3>
 <?= $this->Form->create($shipping) ?>
-<?= $this->Form->button('受取通知を送る',['type' => 'submit','value' => 1,'name' =>'is_received']) ?>
+<?= $this->Form->button('受取通知を送る',['type' => 'submit', 'name' =>'is_received']) ?>
 <?php elseif($shipping_to['is_received'] === true): ?>
 <h2>商品「<?=$biditem['name'] ?>」の発送先情報</h2>
 <table class="vertical-table">

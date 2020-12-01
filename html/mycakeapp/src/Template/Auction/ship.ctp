@@ -51,7 +51,7 @@
 	</tr>
 </table>
 <?= $this->Form->create($shipping) ?>
-<?= $this->Form->button('発送通知を送る',['type' => 'submit','value' => 1,'name' =>'is_shipped']) ?>
+<?= $this->Form->button('発送通知を送る',['type' => 'submit', 'name' =>'is_shipped']) ?>
 
 <?php elseif($shipping_to['is_shipped'] === true && $shipping_to['is_received'] === false): ?>
 <h2>「<?=$biditem['name'] ?> 」の発送先詳細</h2>
