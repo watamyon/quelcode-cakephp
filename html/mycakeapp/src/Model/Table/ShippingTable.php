@@ -35,7 +35,6 @@ class ShippingTable extends Table
         $this->setTable('shipping');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
-		// これもようわからんくなってしまっている。check it out!
         $this->belongsTo('Biditems', [
             'foreignKey' => 'item_id',
             'joinType' => 'INNER',
