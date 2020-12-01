@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -22,6 +23,8 @@ class AuctionController extends AuctionBaseController
 		$this->loadModel('Bidrequests');
 		$this->loadModel('Bidinfo');
 		$this->loadModel('Bidmessages');
+		// shippingのモデルを追加
+		$this->loadModel('Shipping');
 		// ログインしているユーザー情報をauthuserに設定
 		$this->set('authuser', $this->Auth->user());
 		// レイアウトをauctionに変更
@@ -33,8 +36,9 @@ class AuctionController extends AuctionBaseController
 	{
 		// ページネーションでBiditemsを取得
 		$auction = $this->paginate('Biditems', [
-			'order' =>['endtime'=>'desc'], 
-			'limit' => 10]);
+			'order' => ['endtime' => 'desc'],
+			'limit' => 10
+		]);
 		$this->set(compact('auction'));
 	}
 
@@ -56,11 +60,12 @@ class AuctionController extends AuctionBaseController
 			$bidinfo->biditem_id = $id;
 			// 最高金額のBidrequestを検索
 			$bidrequest = $this->Bidrequests->find('all', [
-				'conditions'=>['biditem_id'=>$id], 
+				'conditions' => ['biditem_id' => $id],
 				'contain' => ['Users'],
-				'order'=>['price'=>'desc']])->first();
+				'order' => ['price' => 'desc']
+			])->first();
 			// Bidrequestが得られた時の処理
-			if (!empty($bidrequest)){
+			if (!empty($bidrequest)) {
 				// Bidinfoの各種プロパティを設定して保存する
 				$bidinfo->user_id = $bidrequest->user->id;
 				$bidinfo->user = $bidrequest->user;
@@ -68,13 +73,14 @@ class AuctionController extends AuctionBaseController
 				$this->Bidinfo->save($bidinfo);
 			}
 			// Biditemのbidinfoに$bidinfoを設定
-			$biditem->bidinfo = $bidinfo;		
+			$biditem->bidinfo = $bidinfo;
 		}
 		// Bidrequestsからbiditem_idが$idのものを取得
 		$bidrequests = $this->Bidrequests->find('all', [
-			'conditions'=>['biditem_id'=>$id], 
+			'conditions' => ['biditem_id' => $id],
 			'contain' => ['Users'],
-			'order'=>['price'=>'desc']])->toArray();
+			'order' => ['price' => 'desc']
+		])->toArray();
 		// オブジェクト類をテンプレート用に設定
 		$this->set(compact('biditem', 'bidrequests'));
 	}
@@ -131,7 +137,7 @@ class AuctionController extends AuctionBaseController
 				// 成功時のメッセージ
 				$this->Flash->success(__('入札を送信しました。'));
 				// トップページにリダイレクト
-				return $this->redirect(['action'=>'view', $biditem_id]);
+				return $this->redirect(['action' => 'view', $biditem_id]);
 			}
 			// 失敗時のメッセージ
 			$this->Flash->error(__('入札に失敗しました。もう一度入力下さい。'));
@@ -140,7 +146,7 @@ class AuctionController extends AuctionBaseController
 		$biditem = $this->Biditems->get($biditem_id);
 		$this->set(compact('bidrequest', 'biditem'));
 	}
-	
+
 	// 落札者とのメッセージ
 	public function msg($bidinfo_id = null)
 	{
@@ -158,15 +164,16 @@ class AuctionController extends AuctionBaseController
 			}
 		}
 		try { // $bidinfo_idからBidinfoを取得する
-			$bidinfo = $this->Bidinfo->get($bidinfo_id, ['contain'=>['Biditems']]);
-		} catch(Exception $e){
+			$bidinfo = $this->Bidinfo->get($bidinfo_id, ['contain' => ['Biditems']]);
+		} catch (Exception $e) {
 			$bidinfo = null;
 		}
 		// Bidmessageをbidinfo_idとuser_idで検索
-		$bidmsgs = $this->Bidmessages->find('all',[
-			'conditions'=>['bidinfo_id'=>$bidinfo_id],
+		$bidmsgs = $this->Bidmessages->find('all', [
+			'conditions' => ['bidinfo_id' => $bidinfo_id],
 			'contain' => ['Users'],
-			'order'=>['created'=>'desc']]);
+			'order' => ['created' => 'desc']
+		]);
 		$this->set(compact('bidmsgs', 'bidinfo', 'bidmsg'));
 	}
 
@@ -175,10 +182,11 @@ class AuctionController extends AuctionBaseController
 	{
 		// 自分が落札したBidinfoをページネーションで取得
 		$bidinfo = $this->paginate('Bidinfo', [
-			'conditions'=>['Bidinfo.user_id'=>$this->Auth->user('id')], 
+			'conditions' => ['Bidinfo.user_id' => $this->Auth->user('id')],
 			'contain' => ['Users', 'Biditems'],
-			'order'=>['created'=>'desc'],
-			'limit' => 10])->toArray();
+			'order' => ['created' => 'desc'],
+			'limit' => 10
+		])->toArray();
 		$this->set(compact('bidinfo'));
 	}
 
@@ -187,10 +195,93 @@ class AuctionController extends AuctionBaseController
 	{
 		// 自分が出品したBiditemをページネーションで取得
 		$biditems = $this->paginate('Biditems', [
-			'conditions'=>['Biditems.user_id'=>$this->Auth->user('id')], 
+			'conditions' => ['Biditems.user_id' => $this->Auth->user('id')],
 			'contain' => ['Users', 'Bidinfo'],
-			'order'=>['created'=>'desc'],
-			'limit' => 10])->toArray();
+			'order' => ['created' => 'desc'],
+			'limit' => 10
+		])->toArray();
 		$this->set(compact('biditems'));
+	}
+
+	//  発送先詳細・発送連絡の処理 落札者・出品者のみのアクセス制御
+	public function ship($item_id = null)
+	{
+		$bidinfo = $this->Bidinfo->find()->where(['Bidinfo.biditem_id' => $item_id])->enableHydration(false)->toArray()[0];
+		$biditem = $this->Biditems->find()->where(['Biditems.id' => $item_id])->enableHydration(false)->toArray()[0];
+		$shipping_to = null;
+		$shipping = null;
+		// 該当商品の$shippingカラムの中身がある場合のみ、$shipping_toを作る。
+		// dd([] === $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray());
+		if([] !== $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()){
+			$shipping_to = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()[0];
+		}
+		// 落札者・出品者・ログインユーザーのidを変数に入れる
+		$bidder_id = $bidinfo['user_id'];
+		$seller_id = $biditem['user_id'];
+		$login_userid = $this->Auth->user('id');
+		// 落札者からのpost送信があった場合
+		// この下の条件だと、まだ発送先
+		if ($bidder_id === $login_userid && ($shipping_to['is_shipped'] === false) || null === $shipping_to) {
+			$shipping = $this->Shipping->newEntity();
+			// ship.ctpから発送先の情報が送信されていれば、その発送先の情報をインスタンスに代入する
+			if ($this->request->is('post')) {
+				$shipping = $this->Shipping->patchEntity($shipping, $this->request->getData());
+				// Shippingを保存
+				if ($this->Shipping->save($shipping)) {
+					return $this->redirect(['action' => 'ship', $item_id]);
+				} else {
+					$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+				}
+			}
+		} elseif($bidder_id === $login_userid && $shipping_to['is_shipped'] === true) {
+			return $this->redirect(['action' => 'receive', $item_id]);
+			// 出品者からのpost送信があった場合
+		} elseif ($seller_id === $login_userid) {
+			if ($this->request->is('post')) {
+				$shipping = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->first();
+				$shipping = $this->Shipping->patchEntity($shipping, $this->request->getData());
+				// Shippingを更新
+				if ($this->Shipping->save($shipping)) {
+					return $this->redirect(['action' => 'ship', $item_id]);
+				} else {
+					$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+				}
+			}
+		} else {
+			return $this->redirect(['action' => 'index']);
+		}
+		// viewに値を渡せるように保存。 同じ値が取れるものは排除する必要あり？e.g. bidinfo['biditem_id']でitem_idは取れる。
+			$this->set(compact('bidinfo', 'item_id', 'biditem', 'bidder_id', 'seller_id', 'login_userid', 'shipping_to',  'shipping'));
+		
+	}
+
+	public function receive($item_id = null)
+	{
+		$bidinfo = $this->Bidinfo->find()->where(['Bidinfo.biditem_id' => $item_id])->enableHydration(false)->toArray()[0];
+		$biditem = $this->Biditems->find()->where(['Biditems.id' => $item_id])->enableHydration(false)->toArray()[0];
+		$shipping_to = null;
+		$shipping = null;
+		if([] !== $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()){
+			$shipping_to = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()[0];
+		}
+		// 落札者・ログインユーザーのidを変数に入れる
+		$bidder_id = $bidinfo['user_id'];
+		$login_userid = $this->Auth->user('id');
+		if ($bidder_id === $login_userid && $shipping_to['is_shipped'] === true) {
+			if ($this->request->is('post')) {
+				$shipping = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->first();
+				$shipping = $this->Shipping->patchEntity($shipping, $this->request->getData());
+				// Shippingを更新
+				if ($this->Shipping->save($shipping)) {
+					return $this->redirect(['action' => 'receive', $item_id]);
+				} else {
+					$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+				}
+			}
+		} else {
+			return $this->redirect(['action' => 'index']);
+		}
+		// viewに値を渡せるように保存。 同じ値が取れるものは排除する必要あり？e.g. bidinfo['biditem_id']でitem_idは取れる。
+		$this->set(compact('bidinfo', 'item_id', 'biditem', 'bidder_id', 'login_userid', 'shipping','shipping_to'));
 	}
 }
