@@ -5,7 +5,7 @@
 <?= $this->Form->create($bidmsg) ?>
 <?= $this->Form->hidden('bidinfo_id', ['value' => $bidinfo->id]) ?>
 <?= $this->Form->hidden('user_id', ['value' => $authuser['id']]) ?>
-<?= $this->Form->textarea('message', ['rows'=>2]); ?>
+<?= $this->Form->textarea('message', ['rows' => 2]); ?>
 <?= $this->Form->button('Submit') ?>
 <?= $this->Form->end() ?>
 <table cellpadding="0" cellspacing="0">
@@ -33,4 +33,6 @@
 <?php else: ?>
 <h2>※落札情報はありません。</h2>
 <?php endif; ?>
-
+<td class="actions">
+	<?= $this->Html->link(__('発送・受取の連絡'), ['action' => 'ship', $bidinfo->biditem_id]) ?>
+</td>
