@@ -3,7 +3,6 @@
 		<h2>商品「<?=$biditem['name'] ?>」の発送先情報</h2>
 		<h3>※発送先情報</h3>
 		<?= $this->Form->create($shipping) ?>
-		<?= $this->Form->hidden('item_id', ['value' => $item_id]) ?>
 		<?= $this->Form->control('bidder_name'); ?>
 		<?= $this->Form->control('address'); ?>
 		<?= $this->Form->control('phone_number'); ?>

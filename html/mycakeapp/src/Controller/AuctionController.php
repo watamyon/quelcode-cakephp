@@ -228,6 +228,7 @@ class AuctionController extends AuctionBaseController
 					$is_shipped_false = 0;
 					$is_received_false = 0;
 					$post_data = $this->request->getData();
+					$post_data['item_id'] = $item_id;
 					$post_data['is_shipped'] = $is_shipped_false;
 					$post_data['is_received'] = $is_received_false;
 					$shipping = $this->Shipping->patchEntity($shipping, $post_data);
