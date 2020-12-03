@@ -220,19 +220,27 @@ class AuctionController extends AuctionBaseController
 		$seller_id = $biditem['user_id'];
 		$login_userid = $this->Auth->user('id');
 		// 落札者からのpost送信があった場合
-		if ($bidder_id === $login_userid && null === $shipping_to) {
+		if ($bidder_id === $login_userid) {
 			$shipping = $this->Shipping->newEntity();
 			// ship.ctpから発送先の情報が送信されていれば、その発送先の情報をインスタンスに代入する
-			if ($this->request->is('post')) {
-				$shipping = $this->Shipping->patchEntity($shipping, $this->request->getData());
-				// Shippingを保存
-				if ($this->Shipping->save($shipping)) {
-					return $this->redirect(['action' => 'ship', $item_id]);
-				} else {
-					$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+			if(null === $shipping_to){
+				if ($this->request->is('post')) {
+					$is_shipped_false = 0;
+					$is_received_false = 0;
+					$post_data = $this->request->getData();
+					$post_data['is_shipped'] = $is_shipped_false;
+					$post_data['is_received'] = $is_received_false;
+					$shipping = $this->Shipping->patchEntity($shipping, $post_data);
+					// Shippingを保存
+					if ($this->Shipping->save($shipping)) {
+						return $this->redirect(['action' => 'ship', $item_id]);
+					} else {
+						$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+					}
+				} elseif($shipping_to['is_shipped'] === false) {
 				}
 			}
-		} elseif($bidder_id === $login_userid && $shipping_to['is_shipped'] === true) {
+		}elseif($bidder_id === $login_userid && $shipping_to['is_shipped'] === true) {
 			return $this->redirect(['action' => 'receive', $item_id]);
 			// 出品者からのpost送信があった場合
 		} elseif ($seller_id === $login_userid && isset($shipping_to)) {

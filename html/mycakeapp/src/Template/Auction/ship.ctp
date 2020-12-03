@@ -7,8 +7,6 @@
 		<?= $this->Form->control('bidder_name'); ?>
 		<?= $this->Form->control('address'); ?>
 		<?= $this->Form->control('phone_number'); ?>
-		<?= $this->Form->hidden('is_shipped', ['value' => 0]); ?>
-		<?= $this->Form->hidden('is_received', ['value' => 0]); ?>
 		<?= $this->Form->button('確定') ?>
 		<?= $this->Form->end() ?>
 	<?php elseif($shipping_to['is_shipped'] === false): ?>
