@@ -208,12 +208,12 @@ class AuctionController extends AuctionBaseController
 	{
 		$bidinfo = $this->Bidinfo->find()->where(['Bidinfo.biditem_id' => $item_id])->enableHydration(false)->toArray()[0];
 		$biditem = $this->Biditems->find()->where(['Biditems.id' => $item_id])->enableHydration(false)->toArray()[0];
-		$shipping_to = null;
 		$shipping = null;
-		// 該当商品の$shippingカラムの中身がある場合のみ、$shipping_toを作る。
-		// dd([] === $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray());
+
 		if([] !== $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()){
 			$shipping_to = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()[0];
+		} else {
+			$shipping_to = null;
 		}
 		// 落札者・出品者・ログインユーザーのidを変数に入れる
 		$bidder_id = $bidinfo['user_id'];
@@ -224,6 +224,7 @@ class AuctionController extends AuctionBaseController
 			$shipping = $this->Shipping->newEntity();
 			// ship.ctpから発送先の情報が送信されていれば、その発送先の情報をインスタンスに代入する
 			if(null === $shipping_to){
+				$not_shipped_yet = ($shipping_to['is_shipped'] === false);
 				if ($this->request->is('post')) {
 					$is_shipped_false = 0;
 					$is_received_false = 0;
@@ -238,7 +239,8 @@ class AuctionController extends AuctionBaseController
 					} else {
 						$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 					}
-				} elseif($shipping_to['is_shipped'] === false) {
+				} elseif($not_shipped_yet) {
+					// 発送先詳細を送信済みで、まだ出品者からの発送通知が来ていない場合に、落札者にアクセス権限を与えるためコード
 				}
 			}
 		}elseif($bidder_id === $login_userid && $shipping_to['is_shipped'] === true) {
@@ -264,13 +266,15 @@ class AuctionController extends AuctionBaseController
 	}
 
 	public function receive($item_id = null)
-	{
+	{		
 		$bidinfo = $this->Bidinfo->find()->where(['Bidinfo.biditem_id' => $item_id])->enableHydration(false)->toArray()[0];
 		$biditem = $this->Biditems->find()->where(['Biditems.id' => $item_id])->enableHydration(false)->toArray()[0];
-		$shipping_to = null;
 		$shipping = null;
+		
 		if([] !== $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()){
 			$shipping_to = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()[0];
+		} else {
+			$shipping_to = null;
 		}
 		// 落札者・ログインユーザーのidを変数に入れる
 		$bidder_id = $bidinfo['user_id'];
