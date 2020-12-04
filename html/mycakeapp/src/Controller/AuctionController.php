@@ -242,19 +242,20 @@ class AuctionController extends AuctionBaseController
 				} elseif($not_shipped_yet) {
 					// 発送先詳細を送信済みで、まだ出品者からの発送通知が来ていない場合に、落札者にアクセス権限を与えるためコード
 				}
-			}
-		}elseif($bidder_id === $login_userid && $shipping_to['is_shipped'] === true) {
+			} elseif ($shipping_to['is_shipped'] === true) {
 			return $this->redirect(['action' => 'receive', $item_id]);
-			// 出品者からのpost送信があった場合
-		} elseif ($seller_id === $login_userid && isset($shipping_to)) {
-			if ($this->request->is('post')) {
-				$shipping = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->first();
-				$shipping = $this->Shipping->patchEntity($shipping, ['is_shipped' => 1]);
-				// Shippingを更新
-				if ($this->Shipping->save($shipping)) {
-					return $this->redirect(['action' => 'ship', $item_id]);
-				} else {
-					$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+			}
+		} elseif ($seller_id === $login_userid) {
+			if(isset($shipping_to)){
+				if ($this->request->is('post')) {
+					$shipping = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->first();
+					$shipping = $this->Shipping->patchEntity($shipping, ['is_shipped' => 1]);
+					// Shippingを更新
+					if ($this->Shipping->save($shipping)) {
+						return $this->redirect(['action' => 'ship', $item_id]);
+					} else {
+						$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+					}
 				}
 			}
 		} else {
