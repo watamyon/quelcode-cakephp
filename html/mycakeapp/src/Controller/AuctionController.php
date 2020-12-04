@@ -210,7 +210,7 @@ class AuctionController extends AuctionBaseController
 		$biditem = $this->Biditems->find()->where(['Biditems.id' => $item_id])->enableHydration(false)->toArray()[0];
 		$shipping = null;
 
-		if([] !== $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()){
+		if ([] !== $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()) {
 			$shipping_to = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()[0];
 		} else {
 			$shipping_to = null;
@@ -223,7 +223,7 @@ class AuctionController extends AuctionBaseController
 		if ($bidder_id === $login_userid) {
 			$shipping = $this->Shipping->newEntity();
 			// ship.ctpから発送先の情報が送信されていれば、その発送先の情報をインスタンスに代入する
-			if(null === $shipping_to){
+			if (null === $shipping_to) {
 				$not_shipped_yet = ($shipping_to['is_shipped'] === false);
 				if ($this->request->is('post')) {
 					$is_shipped_false = 0;
@@ -239,14 +239,14 @@ class AuctionController extends AuctionBaseController
 					} else {
 						$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 					}
-				} elseif($not_shipped_yet) {
+				} elseif ($not_shipped_yet) {
 					// 発送先詳細を送信済みで、まだ出品者からの発送通知が来ていない場合に、落札者にアクセス権限を与えるためコード
 				}
 			} elseif ($shipping_to['is_shipped'] === true) {
-			return $this->redirect(['action' => 'receive', $item_id]);
+				return $this->redirect(['action' => 'receive', $item_id]);
 			}
 		} elseif ($seller_id === $login_userid) {
-			if(isset($shipping_to)){
+			if (isset($shipping_to)) {
 				if ($this->request->is('post')) {
 					$shipping = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->first();
 					$shipping = $this->Shipping->patchEntity($shipping, ['is_shipped' => 1]);
@@ -262,17 +262,16 @@ class AuctionController extends AuctionBaseController
 			return $this->redirect(['action' => 'index']);
 		}
 		// viewに値を渡せるように保存。 同じ値が取れるものは排除する必要あり？e.g. bidinfo['biditem_id']でitem_idは取れる。
-			$this->set(compact('bidinfo', 'item_id', 'biditem', 'bidder_id', 'seller_id', 'login_userid', 'shipping_to',  'shipping'));
-		
+		$this->set(compact('bidinfo', 'item_id', 'biditem', 'bidder_id', 'seller_id', 'login_userid', 'shipping_to',  'shipping'));
 	}
 
 	public function receive($item_id = null)
-	{		
+	{
 		$bidinfo = $this->Bidinfo->find()->where(['Bidinfo.biditem_id' => $item_id])->enableHydration(false)->toArray()[0];
 		$biditem = $this->Biditems->find()->where(['Biditems.id' => $item_id])->enableHydration(false)->toArray()[0];
 		$shipping = null;
-		
-		if([] !== $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()){
+
+		if ([] !== $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()) {
 			$shipping_to = $this->Shipping->find()->where(['Shipping.item_id' => $item_id])->enableHydration(false)->toArray()[0];
 		} else {
 			$shipping_to = null;
@@ -294,6 +293,6 @@ class AuctionController extends AuctionBaseController
 		} else {
 			return $this->redirect(['action' => 'index']);
 		}
-		$this->set(compact('bidinfo', 'item_id', 'biditem', 'bidder_id', 'login_userid', 'shipping','shipping_to'));
+		$this->set(compact('bidinfo', 'item_id', 'biditem', 'bidder_id', 'login_userid', 'shipping', 'shipping_to'));
 	}
 }
