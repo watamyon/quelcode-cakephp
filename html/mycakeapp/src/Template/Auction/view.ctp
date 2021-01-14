@@ -123,7 +123,7 @@ $second_e = intval($end_date->format('s'));
 	const second_e = <?php echo $second_e ?>;
 	const end_date = new Date(year_e, month_e, day_e, hour_e, minute_e, second_e);
 	// 差の計算
-	let diff = end_date - current_date
+	let diff = end_date - current_date;
 	diff += +1000;
 
 	// 残り時間表示
