@@ -123,7 +123,7 @@ $second_e = intval($end_date->format('s'));
 	const second_e = <?php echo $second_e ?>;
 	const end_date = new Date(year_e, month_e, day_e, hour_e, minute_e, second_e);
 	// 差の計算
-	var diff = end_date - current_date
+	let diff = end_date - current_date
 	diff += +1000;
 
 	// 残り時間表示
@@ -131,14 +131,14 @@ $second_e = intval($end_date->format('s'));
 		setInterval(function() {
 			diff += -1000;
 			// 残り時間計算
-			var dDays = diff / (1000 * 60 * 60 * 24); // 日数
-			var diff_c = diff % (1000 * 60 * 60 * 24);
-			var dHour = diff_c / (1000 * 60 * 60); // 時間
+			let dDays = diff / (1000 * 60 * 60 * 24); // 日数
+			let diff_c = diff % (1000 * 60 * 60 * 24);
+			let dHour = diff_c / (1000 * 60 * 60); // 時間
 			diff_c = diff_c % (1000 * 60 * 60);
-			var dMin = diff_c / (1000 * 60); // 分
+			let dMin = diff_c / (1000 * 60); // 分
 			diff_c = diff_c % (1000 * 60);
-			var dSec = diff_c / 1000; // 秒'
-			var msg2 = Math.floor(dDays) + "日" +
+			let dSec = diff_c / 1000; // 秒'
+			let msg2 = Math.floor(dDays) + "日" +
 				Math.floor(dHour) + "時間" +
 				Math.floor(dMin) + "分" +
 				Math.floor(dSec) + "秒";
