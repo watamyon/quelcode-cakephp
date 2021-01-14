@@ -124,9 +124,6 @@ $second_e = intval($end_date->format('s'));
 	const end_date = new Date(year_e, month_e, day_e, hour_e, minute_e, second_e);
 	// 差の計算
 	var diff = end_date - current_date
-	console.log(end_date);
-	console.log(current_date);
-	console.log(diff);
 	diff += +1000;
 
 	// 残り時間表示
