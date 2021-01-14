@@ -124,12 +124,12 @@ $second_e = intval($end_date->format('s'));
 	const end_date = new Date(year_e, month_e, day_e, hour_e, minute_e, second_e);
 	// 差の計算
 	let diff = end_date - current_date;
-	diff += +1000;
+	diff += 1000;
 
 	// 残り時間表示
 	if (end_date > current_date) {
 		setInterval(function() {
-			diff += -1000;
+			diff -= 1000;
 			// 残り時間計算
 			let dDays = diff / (1000 * 60 * 60 * 24); // 日数
 			let diff_c = diff % (1000 * 60 * 60 * 24);
