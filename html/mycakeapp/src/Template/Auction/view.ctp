@@ -122,6 +122,7 @@ $second_e = intval($end_date->format('s'));
 				Math.floor(dSec) + "秒";
 			document.getElementById('limit').innerHTML = msg2;
 		} else {
+			clearInterval(do_cal);
 			document.getElementById('limit').innerHTML = 'オークションは終了しました。';
 		}
 	}
@@ -147,7 +148,7 @@ $second_e = intval($end_date->format('s'));
 	// 繰り返し処理
 	if (end_date > current_date) {
 		calculate();
-		setInterval(calculate, 1000);
+		const do_cal = setInterval(calculate, 1000);
 	} else {
 		document.getElementById('limit').innerHTML = 'オークションは終了しました。';
 	}
