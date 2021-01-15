@@ -106,9 +106,6 @@ $minute_e = intval($end_date->format('i'));
 $second_e = intval($end_date->format('s'));
 ?>
 <script>
-	// 現状カウントダウンタイマがページを読み込んでから1秒後に表示されています。
-// jsの書き方を工夫して、ページを表示すると同時にカウントダウンタイマも表示されるようにしましょう。
-// ヒント：setIntervalに渡している関数をsetIntervalの外で1回呼び出すとよいです。修正するにあたり、同じ関数を2度定義しないように気を付けましょう。
 	const calculate = () => {
 		diff -= 1000;
 		if (diff > 0) {
@@ -149,6 +146,7 @@ $second_e = intval($end_date->format('s'));
 	diff += 1000;
 	// 繰り返し処理
 	if (end_date > current_date) {
+		calculate();
 		setInterval(calculate, 1000);
 	} else {
 		document.getElementById('limit').innerHTML = 'オークションは終了しました。';
