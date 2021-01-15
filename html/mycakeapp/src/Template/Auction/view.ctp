@@ -106,6 +106,22 @@ $minute_e = intval($end_date->format('i'));
 $second_e = intval($end_date->format('s'));
 ?>
 <script>
+	const calculate = () => {
+		diff -= 1000;
+		// 残り時間計算
+		let dDays = diff / (1000 * 60 * 60 * 24); // 日数
+		let diff_c = diff % (1000 * 60 * 60 * 24);
+		let dHour = diff_c / (1000 * 60 * 60); // 時間
+		diff_c = diff_c % (1000 * 60 * 60);
+		let dMin = diff_c / (1000 * 60); // 分
+		diff_c = diff_c % (1000 * 60);
+		let dSec = diff_c / 1000; // 秒'
+		let msg2 = Math.floor(dDays) + "日" +
+			Math.floor(dHour) + "時間" +
+			Math.floor(dMin) + "分" +
+			Math.floor(dSec) + "秒";
+		document.getElementById('limit').innerHTML = msg2;
+	}
 	// 現在時刻の取得
 	const year_c = <?php echo $year_c ?>;
 	const month_c = <?php echo $month_c ?>;
@@ -125,26 +141,12 @@ $second_e = intval($end_date->format('s'));
 	// 差の計算
 	let diff = end_date - current_date;
 	diff += 1000;
-
+	// 繰り返し処理
+	// if (end_date > current_date) {
+	// } else {
+	// 	alert('このオークションは既に終了しました')
+	// }
+	setInterval(calculate, 1000);
 	// 残り時間表示
-	if (end_date > current_date) {
-		setInterval(function() {
-			diff -= 1000;
-			// 残り時間計算
-			let dDays = diff / (1000 * 60 * 60 * 24); // 日数
-			let diff_c = diff % (1000 * 60 * 60 * 24);
-			let dHour = diff_c / (1000 * 60 * 60); // 時間
-			diff_c = diff_c % (1000 * 60 * 60);
-			let dMin = diff_c / (1000 * 60); // 分
-			diff_c = diff_c % (1000 * 60);
-			let dSec = diff_c / 1000; // 秒'
-			let msg2 = Math.floor(dDays) + "日" +
-				Math.floor(dHour) + "時間" +
-				Math.floor(dMin) + "分" +
-				Math.floor(dSec) + "秒";
-			document.getElementById('limit').innerHTML = msg2;
-		}, 1000);
-	} else {
-		alert('このオークションは既に終了しました')
-	}
+	
 </script>
