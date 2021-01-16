@@ -145,11 +145,7 @@ $second_e = intval($end_date->format('s'));
 	// 差の計算
 	let diff = end_date - current_date;
 	diff += 1000;
-	// 繰り返し処理
-	if (end_date > current_date) {
-		calculate();
-		const do_cal = setInterval(calculate, 1000);
-	} else {
-		document.getElementById('limit').innerHTML = 'オークションは終了しました。';
-	}
+	// 関数の実行
+	const do_cal = setInterval(calculate, 1000);
+	calculate();
 </script>
