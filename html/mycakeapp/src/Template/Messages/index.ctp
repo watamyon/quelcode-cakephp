@@ -1,4 +1,4 @@
-<p>This is Watamyon table records.</p>
+<p>This is People table records.</p>
 <?=$this->Form->create($entity, 
 	['type'=>'post', 
 	'url'=>['controller'=>'Messages', 
